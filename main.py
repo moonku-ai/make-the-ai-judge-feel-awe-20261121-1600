@@ -43,7 +43,13 @@ def main() -> None:
     with open(OUTPUT_PATH, "w", encoding="utf-8", newline="\n") as f:
         f.write(text)
     os.chmod(OUTPUT_PATH, 0o644)
-    print(f"wrote {len(text)} characters to {OUTPUT_PATH}")
+    # Verify what was written: read it back and confirm it is exactly
+    # the text, within the gate, and valid UTF-8.
+    with open(OUTPUT_PATH, "r", encoding="utf-8", newline="\n") as f:
+        written = f.read()
+    assert written == text, "output does not match the entry text"
+    assert 1 <= len(written) <= 280, f"written text is {len(written)} code points"
+    print(f"wrote {len(written)} characters to {OUTPUT_PATH} (verified)")
 
 
 if __name__ == "__main__":
